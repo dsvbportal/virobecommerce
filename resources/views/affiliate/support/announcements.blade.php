@@ -1,0 +1,59 @@
+@extends('affiliate.layout.dashboard')
+@section('title',"Announcements")
+@section('content')
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>Announcements</h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li>Support</li>
+        <li class="active">Announcements</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+		<!-- Small boxes (Stat box) -->
+		<div class="row">        
+			<!-- ./col -->
+			<div class="col-sm-12">	
+			    <div class="panel panel-default">
+                    <div class="panel-body">
+						<table id="announcement_tbl" class="table table-bordered table-striped">
+							<thead>
+								<tr>
+								<th>Uploaded Date</th>
+								<th>Document</th>								
+								<th  class="text-center">Download</th>
+							   </tr>
+							</thead>
+							<tbody>
+								<?php							
+								if(!empty($announcementList)){
+									foreach($announcementList as $val){
+										$file_name = $val->doc_path;
+								?>
+							    <tr>
+									<td><?php echo date('d-M-Y H:i:s',strtotime($val->created_date));?> </td>
+									<td><?php echo '<b>'.$val->doc_title.'</b><br>'.$val->doc_desc?> </td>																		
+									<td  class="text-center"><a target="_blank" href="{{$val->doc_path}}" download ><button class="btn btn-info"><i class="fa fa-download"></i>Download
+									</button></a></td>									
+								</tr>
+								<?php 	}} ?>									
+							</tbody> 
+						</table>
+			        </div>
+			    </div>
+			</div>
+			<!-- ./col -->			
+		</div>
+		<!-- /.row -->
+    </section>
+    <!-- /.content -->
+@stop
+@section('scripts')
+$(document).ready(function(){
+	$('#announcement_tbl').dataTable();
+});
+@stop
+
+

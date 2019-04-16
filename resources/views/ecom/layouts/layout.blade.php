@@ -1,0 +1,10 @@
+@extends('ecom.layouts.baselayout')
+@section('page-header')
+@include('ecom.common.header')
+@stop
+@section('page-content')
+@yield('page')
+@stop
+@section('page-footer')
+@include('ecom.common.footer')
+@stop

@@ -1,0 +1,2 @@
+<link rel="stylesheet" href="{{asset('resources/assets/themes/affiliate//plugins/datepicker/datepicker3.css')}}">
+<script src="{{asset('resources/assets/themes/affiliate/plugins/datepicker/bootstrap-datepicker.js')}}"></script>
