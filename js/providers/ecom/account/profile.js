@@ -1,6 +1,6 @@
 $(document).ready(function () {	
-  
-    var profile_update=$('#profile_updatefrm');		
+
+    var profile_update=$('#profile_updatefrm');
 	$('#dob').datepicker({ 
 	    maxDate: '-18y',
 	    dateFormat: 'yy-mm-dd',	
@@ -9,7 +9,7 @@ $(document).ready(function () {
 	
 	/* Update Profile */
     profile_update.on('submit', function (e) {
-        e.preventDefault();	
+        e.preventDefault();
         CURFORM=profile_update;
 		var data = new FormData();		
 		if (CROPPED) {					    

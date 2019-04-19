@@ -26,8 +26,9 @@ class DataController extends ecomBaseController
         {
             case 'home':
                 //$op['sliders'] = guzzle::getResponse(config('services.api.url').'shopping/get-sliders', 'POST', [], ['page'=>'home']);				
-				$result = guzzle::getResponse(config('services.api.url').'shopping/get-page-data', 'POST', [], ['page'=>'home']);	
+				$result = guzzle::getResponse(config('services.api.url').'get-page-data', 'POST', [], ['page'=>'home']);	
 				$op = (array)$result;
+				
 				if(isset($op['sliders']->slider) && (!empty($op['sliders']->slider))){									
 					array_walk($op['sliders']->slider,function(&$sliders){					
 						if(isset($sliders->blocks)){
@@ -64,9 +65,8 @@ class DataController extends ecomBaseController
 				}				
 				//$res = guzzle::getResponse('api/v1/user/change-pwd', 'POST', [], $postdata)
                /* $op['my_cart'] = ShoppingPortal::getResponse('api/v1/customer/products/my-cart-count', 'POST', []); */
-                $res['main_categories'] = guzzle::getResponse(config('services.api.url').'shopping/main-categories', 'POST', [], []);
-				echo'<pre>';print_r($op['main_categories']);die();
-
+               // $res['main_categories'] = guzzle::getResponse(config('services.api.url').'shopping/main-categories', 'POST', [], []); 
+           	
          	    array_walk($op['main_categories'], function(&$category)
 				{
 					$category->url = $this->commonObj->generateUrl($category);					
@@ -100,7 +100,6 @@ class DataController extends ecomBaseController
         }
         $this->statusCode = $this->config->get('httperr.SUCCESS');
         //return Response::json($this->response, $this->statusCode, $this->headers, $this->options);
-
 		return $this->response->json($op, $this->statusCode, $this->headers, $this->options);
     }
 

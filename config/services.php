@@ -62,7 +62,7 @@ return [
         'url'=>'sms.virob.com/submitsms.jsp?',
     ],	
 	'api'=> [
-		'url' =>'http://localhost/dsvb_portal/api/v1/',
+		'url' =>'http://localhost/dsvb_portal/ecom/api/v1/',
 	],
 	'localApi'=> [
 		'url' =>'http://localhost/dsvb_portal/api/v1/',

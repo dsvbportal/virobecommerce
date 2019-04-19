@@ -63,14 +63,15 @@ class ecomBaseController extends Controller
 			$user_details = $this->config->get('app.accountInfo');
             if (!empty($user_details))
             {		
-				$user_details = (object)$user_details;
+				$user_details      = (object)$user_details;
+              
 				//$this->acc_type_id = $this->account_type_id = $user_details->account_type;
-                $this->account_id = $user_details->account_id;
-                $this->uname = $user_details->uname;
-                $this->full_name = $user_details->full_name;
-                $this->email = $user_details->email;
-                $this->mobile = $user_details->mobile;
-                $this->language_id = $user_details->language_id;
+                $this->account_id  = $user_details->account_id;
+                $this->uname       = $user_details->uname;
+                $this->full_name   = $user_details->full_name;
+                $this->email       = $user_details->email;
+                $this->mobile      = $user_details->mobile;
+                $this->language_id = $user_details->locale_id;
                 // $this->language_id = 1;
                 //$this->time_zone_id = $user_details->time_zone_id;
                 $this->currency_id = $user_details->currency_id;                

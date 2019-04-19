@@ -18,10 +18,7 @@ class CmsController extends ecomBaseController
 
     public function cmsPage ($cms_url)
     { 
-     
-        $content = guzzle::getResponse(config('services.api.url').'user/cms/page/'.$cms_url, 'POST', [], []);
-             
-       
+        $content = guzzle::getResponse(config('services.api.url').'cms/page/'.$cms_url, 'POST', [], []);
         if (!empty($content)) 
 		{   if($content->status==200){   
             
@@ -33,12 +30,8 @@ class CmsController extends ecomBaseController
             }
              return view('shopping.cms', $data);
            }
-           
         }
         return app()->abort(404);
     }
-
-
-
 
 }

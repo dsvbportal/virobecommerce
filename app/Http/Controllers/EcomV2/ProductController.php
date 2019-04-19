@@ -45,7 +45,7 @@ class ProductController extends ecomBaseController
 		}		
 	    if (!empty($postdata)) {
 			
-            $res = guzzle::getResponse($this->config->get('services.api.url').'shopping/product/'.$category_slug.'?searchTerm=' . $searchTerm, 'POST', [], $postdata);	
+            $res = guzzle::getResponse($this->config->get('services.api.url').'product/'.$category_slug.'?searchTerm=' . $searchTerm, 'POST', [], $postdata);	
         //   echo'<pre>';print_r($res);die();
             if (!empty($res)) {
 				if(isset($res->breadcrums)) {				
@@ -328,7 +328,9 @@ class ProductController extends ecomBaseController
     {
         $data = [];
         $postdata = $this->request->all();       
-        $res = guzzle::getResponse($this->config->get('services.api.url').'shopping/product/' . $category_slug . '/' . $slug . '?pid=' . $postdata['pid'], 'POST', [], $postdata);   				
+        $res = guzzle::getResponse($this->config->get('services.api.url').'product/' . $category_slug . '/' . $slug . '?pid=' . $postdata['pid'], 'POST', [], $postdata);  
+
+		//echo '<pre>';print_r($res);exit;	
         if($res){  
             if($res->breadcrums) {
                 array_walk($res->breadcrums, function(&$breadcrum) {
@@ -379,7 +381,7 @@ class ProductController extends ecomBaseController
             }			
 			 
             //$res = guzzle::getResponse('api/v1/shopping/product/'.$category_slug.'/'.$slug.'?pid='.$postdata['pid'], 'POST', [], $postdata);
-            $res = guzzle::getResponse($this->config->get('services.api.url').'shopping/product/'. $category . '/' . $product . '?pid=' . $this->request->supplier_product_code, 'POST', [], []);
+            $res = guzzle::getResponse($this->config->get('services.api.url').'product/'. $category . '/' . $product . '?pid=' . $this->request->supplier_product_code, 'POST', [], []);
          
             if (!empty($res)) {
                 if (isset($res->productDetails->imgs[0])) {
@@ -673,7 +675,7 @@ class ProductController extends ecomBaseController
                 $details = Cart::instance('ecomCart')->get($data['rowid']);
                 $product_details = json_decode(json_encode($details));
                 $data['supplier_product_code'] = $product_details->id;
-                $res = guzzle::getResponse($this->config->get('services.api.url').'shopping/product/check-stock-avaliablity', 'POST', [], $data);
+                $res = guzzle::getResponse($this->config->get('services.api.url').'product/check-stock-avaliablity', 'POST', [], $data);
                // echo'<pre>';print_r($data['qty']);die();
                 if ($res) {
                     if ( $res->product_max->stock_on_hand >= $data['qty']) {
@@ -710,7 +712,7 @@ class ProductController extends ecomBaseController
         $op['status'] = $this->statusCode = $this->config->get('httperr.UN_PROCESSABLE');
 
 		$postdata = $this->request->all();
-        $res = guzzle::getResponse($this->config->get('services.api.url').'shopping/product/' . $postdata['category'] . '/' . $postdata['product'] . '?pid=' . $postdata['id'], 'POST', [], []);
+        $res = guzzle::getResponse($this->config->get('services.api.url').'product/' . $postdata['category'] . '/' . $postdata['product'] . '?pid=' . $postdata['id'], 'POST', [], []);
 		if (!empty($res)) {           
             $product_code = $res->productDetails->product_code;
             $product_name = $res->productDetails->product_name;
@@ -751,7 +753,7 @@ class ProductController extends ecomBaseController
 		$op = $op['data']= [];			
 		$postdata = $this->request->all();	
 		if (!empty($postdata)) {		
-			$res = guzzle::getResponse($this->config->get('services.api.url').'shopping/product/search', 'POST', [], $postdata);	          	
+			$res = guzzle::getResponse($this->config->get('services.api.url').'product/search', 'POST', [], $postdata);	          	
 			if(!empty($res)) {	
                 if(!empty($res->data)){			
 					array_walk($res->data, function(&$result) {						

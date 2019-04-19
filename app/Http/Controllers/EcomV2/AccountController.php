@@ -81,11 +81,11 @@ class AccountController extends ecomBaseController
 		{
 			$postdata = $this->request->all();
 			unset($postdata['temsandcondition']);
-			$res = guzzle::getResponse($this->config->get('services.api.url').'shopping/signup', 'POST', [], $postdata);
+			$res = guzzle::getResponse($this->config->get('services.api.url').'signup', 'POST', [], $postdata);
 
 			if(isset($res->status))
 			{
-				$result = guzzle::getResponse($this->config->get('services.api.url').'shopping/signup-code-resend', 'POST', ['regtoken'=>$res->regtoken], $postdata);
+				$result = guzzle::getResponse($this->config->get('services.api.url').'signup-code-resend', 'POST', ['regtoken'=>$res->regtoken], $postdata);
 				if($result->status==200){ 
 				$op['status'] = $this->statusCode = $this->config->get('httperr.SUCCESS');
 				$op['msg'] = "OTP Send To Your Mobile Number"; 
@@ -115,7 +115,7 @@ class AccountController extends ecomBaseController
         $postdata = $this->request->all();
         $regtoken = $this->request->header('regtoken');
         
-        $res = guzzle::getResponse($this->config->get('services.api.url').'shopping/confirm-signup', 'POST',['regtoken'=>$regtoken],$postdata);
+        $res = guzzle::getResponse($this->config->get('services.api.url').'confirm-signup', 'POST',['regtoken'=>$regtoken],$postdata);
         
      
        /*  if($res->status==200){
@@ -190,7 +190,7 @@ class AccountController extends ecomBaseController
 
         $op['status'] = $this->statusCode = $this->config->get('httperr.UN_PROCESSABLE');
         $regtoken = $this->request->header('regtoken');
-        $result = guzzle::getResponse($this->config->get('services.api.url').'shopping/signup-code-resend', 'POST', ['regtoken'=>$regtoken],$postdata);
+        $result = guzzle::getResponse($this->config->get('services.api.url').'signup-code-resend', 'POST', ['regtoken'=>$regtoken],$postdata);
        
         if($result->status==200)
         {
@@ -238,12 +238,10 @@ class AccountController extends ecomBaseController
         $postdata = $this->request->all();
         // print_r($this->config->get('services.api.url'));
         if (!empty($postdata)) {
-          // $res = guzzle::getResponse('api/v1/user/login', 'POST', [], $postdata);
-            $res = guzzle::getResponse($this->config->get('services.api.url').'user/login', 'POST', [], $postdata);
+        
+            $res = guzzle::getResponse($this->config->get('services.api.url').'login', 'POST', [], $postdata);
             
-
-
-            if (!empty($res)) {
+            if(!empty($res)) {
                 if (isset($res->status)) {
                     if ($res->status == $this->config->get('httperr.SUCCESS')) {						
                         $this->session->put($this->sessionName, $res);
@@ -259,13 +257,13 @@ class AccountController extends ecomBaseController
                         $op['uname'] = $res->uname;
                         $op['is_merchant'] = 0;
                         $op['user_code'] = $res->user_code;
-                        $op['account_type'] = $res->account_type;
+                        $op['account_type'] = $res->account_type_id;
                         $op['account_type_name'] = $res->account_type_name;
                         $op['mobile'] = $res->mobile;
                         $op['email'] = $res->email;
                         $op['gender'] = $res->gender;
                         $op['dob'] = $res->dob;
-                        $op['language_id'] = $res->language_id;
+                        $op['language_id'] = $res->locale_id;
                         $op['currency_id'] = $res->currency_id;
                         $op['currency_code'] = $res->currency_code;
                         $op['country_flag'] = $res->country_flag;
@@ -316,7 +314,7 @@ class AccountController extends ecomBaseController
         $op['status'] = $this->config->get('httperr.UN_PROCESSABLE');
         $postdata = $this->request->all(); 	
         if (!empty($postdata)){		    
-            $res = guzzle::getResponse($this->config->get('services.api.url').'user/forgot-pwd', 'POST', [], $postdata);     
+            $res = guzzle::getResponse($this->config->get('services.api.url').'forgot-pwd', 'POST', [], $postdata);     
             if (!empty($res)) {						
                 if (isset($res->status)) {	  		
 				    if($this->config->get('app.env') == 'local'){
@@ -344,7 +342,7 @@ class AccountController extends ecomBaseController
         $data['status'] = $this->config->get('httperr.UN_PROCESSABLE');		
         if (!empty($token) && strpos($token, '.'))
 		{			
-	        $res = guzzle::getResponse($this->config->get('services.api.url').'user/resetpwd-link/'.$token, 'POST', [], []);  
+	        $res = guzzle::getResponse($this->config->get('services.api.url').'resetpwd-link/'.$token, 'POST', [], []);  
 			if (!empty($res)) {		
 				if($res->status == $this->config->get('httperr.SUCCESS')){				
 			    	$restoken = Decrypt_Reg_Token($token);
@@ -371,7 +369,7 @@ class AccountController extends ecomBaseController
         $header['token'] = $this->request->header('token');
         $postdata = $this->request->all();						
         if(!empty($postdata)) {
-		    $res = guzzle::getResponse($this->config->get('services.api.url').'user/reset-password', 'POST', $header, $postdata); 
+		    $res = guzzle::getResponse($this->config->get('services.api.url').'reset-password', 'POST', $header, $postdata); 
             if (!empty($res)) {
                 if (isset($res->status)) {   
 					if($res->status == $this->config->get('httperr.SUCCESS')){
@@ -408,7 +406,7 @@ class AccountController extends ecomBaseController
 			$multipart = $postdata['attachment'];	 */	
             //print_r($postdata);exit;    					
 	        //$res = guzzle::getResponse('api/v1/user/profile-settings/profile/update', 'POST', [], $postdata, $multipart);
-	        $res = guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/profile/update', 'POST', [], $postdata);				
+	        $res = guzzle::getResponse($this->config->get('services.api.url').'profile-settings/profile/update', 'POST', [], $postdata);				
 			
             if (!empty($res)) {
                 if (isset($res->status)) {
@@ -509,7 +507,7 @@ class AccountController extends ecomBaseController
         $postdata['account_id'] = $this->userSess->account_id;				
         if ($this->userSess->pass_key == md5($this->request->current_password)) {
             if ($this->userSess->pass_key != md5($this->request->conf_password)) {
-                if ($res = guzzle::getResponse($this->config->get('services.api.url').'user/change-pwd', 'POST', [], $postdata)) {
+                if ($res = guzzle::getResponse($this->config->get('services.api.url').'change-pwd', 'POST', [], $postdata)) {
                     if (isset($res->status)) {
                         if ($res->status == $this->config->get('httperr.SUCCESS')) {
                             $this->userSess->pass_key = md5($this->request->password);
@@ -557,7 +555,7 @@ class AccountController extends ecomBaseController
 
         if (!empty($postdata)) {
           
-            $res = guzzle::getResponse($this->config->get('services.api.url').'user/contact-us-email', 'POST', [], $postdata);
+            $res = guzzle::getResponse($this->config->get('services.api.url').'contact-us-email', 'POST', [], $postdata);
 
             
            if(!empty($res) && isset($res->status)){
@@ -621,7 +619,7 @@ class AccountController extends ecomBaseController
 
         $postdata['link'] = route('ecom.change-email.varify_link', ['token' => $ses['token']]);
         $postdata['partner_site_name'] = 'virob';
-        $res = guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/change-email/send-verification', 'POST', [], $postdata);
+        $res = guzzle::getResponse($this->config->get('services.api.url').'profile-settings/change-email/send-verification', 'POST', [], $postdata);
 
         if (!empty($res)) {
 
@@ -689,7 +687,7 @@ class AccountController extends ecomBaseController
         $postdata['link'] = route('ecom.change-email.varify_new_link', ['token' => $ses['token']]);
         $postdata['partner_site_name'] = 'virob';
 
-        $res = guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/change-email/send-verification', 'POST', [], $postdata);
+        $res = guzzle::getResponse($this->config->get('services.api.url').'profile-settings/change-email/send-verification', 'POST', [], $postdata);
 
         if (!empty($res)) {
             $op['link'] = $postdata['link'];
@@ -713,7 +711,7 @@ class AccountController extends ecomBaseController
                 $data = [];
                 $data['acc_id'] = $email_sess['account_id'];
                 $data['email'] = $email_sess['new_email'];
-                $result=guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/change-email/email-table-update', 'POST', [], $data);                              
+                $result=guzzle::getResponse($this->config->get('services.api.url').'profile-settings/change-email/email-table-update', 'POST', [], $data);                              
                 if ($result->status=200) {
                     $user_details = $this->userSess;
                     $user_details->email = $data['email'];
@@ -744,7 +742,7 @@ class AccountController extends ecomBaseController
 public function bank_detail()
  {
        $data['acc_id']=$this->userSess->account_id;
-       $result=guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/bank/get-payout-list', 'POST', [], $data);
+       $result=guzzle::getResponse($this->config->get('services.api.url').'profile-settings/bank/get-payout-list', 'POST', [], $data);
       
        $res['user_info']='';
        $res['cpfields'] = CommonNotifSettings::getHTMLValidation('ecom.account.update_bank_detail');
@@ -856,7 +854,7 @@ public function bank_detail()
         // print_r($data);
 
         //print_r($this->config->get('services.api.url').'user/profile-settings/bank/send-otp-bank');exit;
-        $res=$result=guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/bank/send-otp-bank', 'POST', [], $data);
+        $res=$result=guzzle::getResponse($this->config->get('services.api.url').'profile-settings/bank/send-otp-bank', 'POST', [], $data);
         // print_r($res);
 
         if(!empty($res) && isset($res->status))
@@ -926,7 +924,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
     else
     {
         $postdata['row_id']=$this->session->get('bank_row_id');
-        $result=guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/bank/get-bank-details', 'POST', [], $postdata);
+        $result=guzzle::getResponse($this->config->get('services.api.url').'profile-settings/bank/get-bank-details', 'POST', [], $postdata);
         $data['id']=$result->id;
         $data['user_info']=$result->details;
         $a = view('shopping.account.update_bank_detail', $data)->render();
@@ -956,7 +954,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
      
       
    
-      $res=guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/bank/bank-add-details', 'POST', [], $data);  
+      $res=guzzle::getResponse($this->config->get('services.api.url').'profile-settings/bank/bank-add-details', 'POST', [], $data);  
        
 
      if ($res->status==200) {
@@ -984,7 +982,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
        $data['row_id']=$postdata['row_id'];
 
     
-     $res=guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/bank/update-bank-details', 'POST', [], $data);
+     $res=guzzle::getResponse($this->config->get('services.api.url').'profile-settings/bank/update-bank-details', 'POST', [], $data);
               if ($res->status==200) {
                     
                     $op['msg'] = trans('ecom/account.bank_updated');
@@ -1007,7 +1005,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
         $postdata['account_id']=$this->userSess->account_id;
          // echo"<pre>";  print_r($postdata);exit;
 
-    $res=guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/bank/find-ifsc', 'POST', [], $postdata);
+    $res=guzzle::getResponse($this->config->get('services.api.url').'profile-settings/bank/find-ifsc', 'POST', [], $postdata);
    
     if($res->status==200)
     {
@@ -1035,7 +1033,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
    $postdata=$this->request->all();
    $postdata['account_id']=$this->userSess->account_id;
 
-    $res=guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/bank/change-status', 'POST', [], $postdata);
+    $res=guzzle::getResponse($this->config->get('services.api.url').'profile-settings/bank/change-status', 'POST', [], $postdata);
     if($res->status==200)
         {
             if($postdata['status']==0)
@@ -1064,7 +1062,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
  public function remove_bank()
  {
     $postdata=$this->request->all();
-     $res=guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/bank/remove-bank', 'POST', [], $postdata);
+     $res=guzzle::getResponse($this->config->get('services.api.url').'profile-settings/bank/remove-bank', 'POST', [], $postdata);
      if($res->status==200)
         {
               $op['msg'] = "Bank details removed";
@@ -1104,7 +1102,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
         $op = [];
         $token = $this->session->getId() . md5(rand('000000', '999999'));
         $data['link'] = url('verify_link/' . $token);
-        $res = guzzle::getResponse($this->config->get('services.api.url').'user/change-mobile-request', 'POST', [], $data);
+        $res = guzzle::getResponse($this->config->get('services.api.url').'change-mobile-request', 'POST', [], $data);
         if (isset($res->status)) {
             $op['msg'] = $res->msg;
             $op['status'] = $this->statusCode = $res->status;
@@ -1147,7 +1145,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
         //echo'<pre>';print_r($session_userarray);die();
         $this->session->forget('updatemobSess');
         if (!empty($postdata)) {
-            $res = guzzle::getResponse($this->config->get('services.api.url').'user/change-mobile-update', 'POST', [], $postdata);
+            $res = guzzle::getResponse($this->config->get('services.api.url').'change-mobile-update', 'POST', [], $postdata);
             if (!empty($res)) {
                 if (isset($res->status)) {
                     if ($res->status == $this->config->get('httperr.SUCCESS')) {
@@ -1184,7 +1182,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
                 $session_userarray = $this->session->get('user_change_mobile');
                 $postdata['account_id'] = $session_userarray['account_id'];
                 if (!empty($postdata)) {
-                    $res = guzzle::getResponse($this->config->get('services.api.url').'user/change-mobile-save', 'POST', [], $postdata);
+                    $res = guzzle::getResponse($this->config->get('services.api.url').'change-mobile-save', 'POST', [], $postdata);
                     if (!empty($res)) {
                         if (isset($res->status)) {
                             if ($res->status == $this->config->get('httperr.SUCCESS')) {
@@ -1244,10 +1242,10 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
 		$op['msg'] = 'Something went wrong.';
 		$op['status'] = $this->config->get('httperr.UN_PROCESSABLE');	
 		$header['token'] = $this->request->header('token');			
-		$postdata = $this->request->all();			
-		if(!empty($postdata)){			
-			$res = guzzle::getResponse($this->config->get('services.api.url').'user/check-pincode', 'POST', $header, $postdata);	
-			if(!empty($res)){		
+		$postdata = $this->request->all();
+        if(!empty($postdata)){
+			$res = guzzle::getResponse($this->config->get('services.api.url').'check-pincode', 'POST', $header, $postdata);	
+            if(!empty($res)){
 				if(isset($res->status)){								
 					$op['data'] = $res->data;
 					$op['msg'] = $res->msg;
@@ -1275,7 +1273,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
 			$data['address_type'] = (isset($postdata['address_type']) && !empty($postdata['address_type'])) ? $postdata['address_type']:'';		
             $data['add_address'] = (isset($postdata['type']) && !empty($postdata['type'])) ? $postdata['type']:'';			
 			if(!empty($postdata['address_type'])){
-				$res = guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/get-address', 'POST', $header, $postdata);	 
+				$res = guzzle::getResponse($this->config->get('services.api.url').'profile-settings/get-address', 'POST', $header, $postdata);	 
 				if(!empty($res)){		
 					if(isset($res->status)){
 						if(!empty($res->address) && $res->status == $this->config->get('httperr.SUCCESS')){
@@ -1295,7 +1293,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
 		    $data = [];
 			$data['billingAddr'] = $data['shippingAddr'] ='';
 		    $postdata['address_type'] = $this->config->get('constants.ADDRESS_TYPE.PRIMARY');
-			$res = guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/get-address', 'POST', $header, $postdata);    
+			$res = guzzle::getResponse($this->config->get('services.api.url').'profile-settings/get-address', 'POST', $header, $postdata);    
 			if(!empty($res)){				
 				if(isset($res->status)){
                     if(!empty($res->address) && $res->status == $this->config->get('httperr.SUCCESS')){
@@ -1304,7 +1302,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
 				}		
 			}			
 			$postdata['address_type'] = $this->config->get('constants.ADDRESS_TYPE.SHIPPING');
-			$res = guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/get-address', 'POST', $header, $postdata);	      
+			$res = guzzle::getResponse($this->config->get('services.api.url').'profile-settings/get-address', 'POST', $header, $postdata);	      
 			if(!empty($res)){		
 				if(isset($res->status)){
                     if(!empty($res->address) && $res->status == $this->config->get('httperr.SUCCESS')){
@@ -1330,7 +1328,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
 		$header['usrtoken'] = $this->userSess->token;	
 		$data['billingAddr'] = $data['shippingAddr'] ='';
 		$postdata['address_type'] = $this->config->get('constants.ADDRESS_TYPE.PRIMARY');
-		$res = guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/get-address', 'POST', $header, $postdata);    
+		$res = guzzle::getResponse($this->config->get('services.api.url').'profile-settings/get-address', 'POST', $header, $postdata);    
 		if(!empty($res)){               
 			if(isset($res->status)){
 				if(!empty($res->address) && $res->status == $this->config->get('httperr.SUCCESS')){
@@ -1339,7 +1337,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
 			}       
 		}           
 		$postdata['address_type'] = $this->config->get('constants.ADDRESS_TYPE.SHIPPING');
-		$res = guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/get-address', 'POST', $header, $postdata);       
+		$res = guzzle::getResponse($this->config->get('services.api.url').'profile-settings/get-address', 'POST', $header, $postdata);       
 		if(!empty($res)){       
 			if(isset($res->status)){
 				if(!empty($res->address) && $res->status == $this->config->get('httperr.SUCCESS')){
@@ -1369,9 +1367,8 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
 		$postdata = $this->request->all();
 		//print_r($postdata);exit;
 		if(!empty($postdata)){
-			$res = guzzle::getResponse($this->config->get('services.api.url').'user/profile-settings/save-address', 'POST', $header, $postdata);
-            
-			if(!empty($res)){		
+			$res = guzzle::getResponse($this->config->get('services.api.url').'profile-settings/save-address', 'POST', $header, $postdata);
+			if(!empty($res)){
 				if(isset($res->status)){	
 					$op['address_id'] = $res->address_id;
 					$op['address_type_id'] = $res->address_type_id;
@@ -1409,7 +1406,7 @@ return $this->response->json($op, $this->statusCode, $this->headers, $this->opti
         $postdata['to'] = !empty($this->request->to_date) ? $this->request->to_date : ''; 
 		$res = guzzle::getResponse('api/v1/user/my-orders/all', 'POST', [], $postdata);*/
 
-        $res = guzzle::getResponse($this->config->get('services.api.url').'shopping/order/my-orders', 'POST', $header, $postdata);
+        $res = guzzle::getResponse($this->config->get('services.api.url').'order/my-orders', 'POST', $header, $postdata);
 
        
         array_walk($res->data,function(&$res) {
